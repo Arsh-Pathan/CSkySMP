@@ -42,36 +42,28 @@ public class Placeholder extends PlaceholderExpansion {
             assert player != null;
             int hearts = heartManager.getHearts(player);
             if (heartManager.hasHaxHearts(player)) {
-                placeholder = "&#7986cbMAX";
+                placeholder = "&4MAX";
             } else {
-                placeholder = "&#E57373" + hearts + "&#7986cb♥";
+                placeholder = "&c" + hearts + "&4♥";
             }
         }
 
-        if (teamManager.hasTeam(player)) {
-            if (params.equalsIgnoreCase("team")) {
-                placeholder = teamManager.getTeamData(player).getColor() + teamManager.getTeamData(player).getName();
-            }
-            if (params.equalsIgnoreCase("team_color_symbol")) {
-                placeholder = "&r" + teamManager.getTeamData(player).getColor() + teamManager.getTeamData(player).getSymbol();
-            }
-            if (params.equalsIgnoreCase("team_name")) {
-                placeholder = teamManager.getTeamData(player).getName();
-            }
-            if (params.equalsIgnoreCase("team_color")) {
-                placeholder = "&r" + teamManager.getTeamData(player).getColor();
-            }
-            if (params.equalsIgnoreCase("team_symbol")) {
-                placeholder = teamManager.getTeamData(player).getSymbol();
-            }
-            if (params.equalsIgnoreCase("team_leader")) {
-                placeholder =teamManager.getTeamData(player).getLeader().getName();
-            }
-        } else {
-            if (params.equalsIgnoreCase("team")) {
-                placeholder = "&r&bN/D";
+        if (params.equalsIgnoreCase("team_nametag") || params.equalsIgnoreCase("team_tablist")) {
+            if (teamManager.hasTeam(player)) {
+                placeholder = teamManager.getTeamData(player).getColor() + teamManager.getTeamData(player).getSymbol();
+            } else {
+                placeholder = "";
             }
         }
+
+        if (params.equalsIgnoreCase("team_scoreboard")) {
+            if (teamManager.hasTeam(player)) {
+                placeholder = teamManager.getTeamData(player).getColor() + teamManager.getTeamData(player).getName();
+            } else {
+                placeholder = "&7No Team";
+            }
+        }
+
         return Color.colorize(placeholder);
     }
 
