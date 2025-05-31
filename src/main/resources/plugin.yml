@@ -1,0 +1,7 @@
+name: CSkySMP
+version: '1.0'
+main: io.arsh.Main
+api-version: '1.21'
+prefix: SMP
+authors: [ Arsh ]
+description: A minecraft plugin for CSky SMP
