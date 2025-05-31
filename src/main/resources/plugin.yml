@@ -1,6 +1,6 @@
 name: CSkySMP
 version: '1.0'
-main: io.arsh.Main
+main: io.Main
 api-version: '1.21'
 prefix: SMP
 authors: [ Arsh ]
