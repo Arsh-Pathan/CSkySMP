@@ -5,3 +5,7 @@ api-version: '1.21'
 prefix: SMP
 authors: [ Arsh ]
 description: A minecraft plugin for CSky SMP
+commands:
+  team:
+  withdraw:
+  combatsession:
