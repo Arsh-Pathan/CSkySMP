@@ -30,7 +30,7 @@ public final class Main extends JavaPlugin implements Listener {
 
         new CombatLog(this, heartManager);
         new CombatSession(this);
-        new Placeholder(heartManager).register();
+        new Placeholder(heartManager, teamManager).register();
     }
 
     @EventHandler
