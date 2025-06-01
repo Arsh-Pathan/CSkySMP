@@ -1,5 +1,6 @@
 package io.arsh.combat;
 
+import io.arsh.admin.AdminManager;
 import io.arsh.combat.commands.SessionCMD;
 import io.arsh.utils.Color;
 import org.bukkit.*;
@@ -23,15 +24,17 @@ public class CombatSession implements Listener {
     private BossBar bossBar;
     private long endTime;
     private BukkitRunnable countdownTask;
+    private final AdminManager adminManager;
 
     private final String PREFIX = "&5&lS&d&lM&f&lP ";
 
-    public CombatSession(JavaPlugin plugin) {
+    public CombatSession(JavaPlugin plugin, AdminManager adminManager) {
         this.plugin = plugin;
+        this.adminManager = adminManager;
         this.config = plugin.getConfig();
 
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        plugin.getCommand("combatsession").setExecutor(new SessionCMD(plugin, this));
+        plugin.getCommand("combatsession").setExecutor(new SessionCMD(plugin, this, adminManager));
 
         if (config.getBoolean("Combat-Session.Enable")) {
             this.endTime = config.getLong("Combat-Session.End-Time", 0L);

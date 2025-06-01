@@ -3,8 +3,6 @@ package io.arsh.team.commands.subCommands;
 import io.arsh.team.TeamManager;
 import io.arsh.utils.Color;
 import io.arsh.utils.SubCommand;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;

@@ -19,7 +19,7 @@ public class TeamManager {
     private final JavaPlugin plugin;
     private final Map<UUID, TeamData> teamData;
     private FileConfiguration data;
-    private InviteManager inviteManager;
+    private final InviteManager inviteManager;
 
     public TeamManager(JavaPlugin plugin) {
         this.plugin = plugin;

@@ -18,16 +18,18 @@ public class SessionCMD implements CommandExecutor, TabCompleter {
     private final JavaPlugin plugin;
     private final CombatSession session;
     private final String PREFIX = "&5&lS&d&lM&f&lP ";
+    private final AdminManager adminManager;
 
-    public SessionCMD(JavaPlugin plugin, CombatSession session) {
+    public SessionCMD(JavaPlugin plugin, CombatSession session, AdminManager adminManager) {
         this.plugin = plugin;
         this.session = session;
+        this.adminManager = adminManager;
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player player) {
-            if (!AdminManager.isAdmin(player)) return true;
+            if (!adminManager.isAdmin(player)) return true;
             if (args.length == 0 || args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("?")) {
                 player.sendMessage("");
                 player.sendMessage(Color.colorize("&r                 &5&lCOMBAT SESSION COMMANDS"));

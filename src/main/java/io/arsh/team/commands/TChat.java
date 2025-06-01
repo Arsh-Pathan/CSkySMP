@@ -14,7 +14,7 @@ import java.util.List;
 public class TChat implements CommandExecutor, TabCompleter {
 
     private final String PREFIX = "&3&lS&b&lM&f&lP ";
-    private TeamManager teamManager;
+    private final TeamManager teamManager;
     public TChat(TeamManager teamManager) {
         this.teamManager = teamManager;
     }
