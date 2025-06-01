@@ -1,11 +1,12 @@
 package io.arsh.team;
 
+import io.arsh.team.commands.TeamCommand;
 import io.arsh.utils.Color;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -18,14 +19,17 @@ public class TeamManager {
     private final JavaPlugin plugin;
     private final Map<UUID, TeamData> teamData;
     private FileConfiguration data;
+    private InviteManager inviteManager;
 
     public TeamManager(JavaPlugin plugin) {
         this.plugin = plugin;
         this.teamData = new HashMap<>();
+        this.inviteManager = new InviteManager(plugin, this);
     }
 
     public void initialize() {
         loadTeamData();
+        plugin.getCommand("team").setExecutor(new TeamCommand(plugin, this, inviteManager));
     }
     
     public void loadTeamData() {
@@ -40,14 +44,14 @@ public class TeamManager {
             String name = data.getString(key + ".Name");
             Color color = Color.valueOf(data.getString(key + ".Color"));
             String symbol = data.getString(key + ".Symbol");
-            Player leader = plugin.getServer().getPlayer(UUID.fromString(data.getString(key + ".Leader")));
-            List<Player> members = data.getStringList(key + ".Members").stream().map(UUID::fromString).map(plugin.getServer()::getPlayer).toList();
+            OfflinePlayer leader = plugin.getServer().getOfflinePlayer(UUID.fromString(data.getString(key + ".Leader")));
+            List<OfflinePlayer> members = data.getStringList(key + ".Members").stream().map(UUID::fromString).map(plugin.getServer()::getOfflinePlayer).toList();
             Location base = data.getLocation(key + ".Base");
             teamData.put(uuid, new TeamData(uuid, name, color, symbol, leader, members, base));
         }
     }
     
-    public TeamData getTeamData(Player player) {
+    public TeamData getTeamData(OfflinePlayer player) {
         for (TeamData data : teamData.values()) {
             if (data.getMembers().contains(player)) {
                 return data;
@@ -56,7 +60,7 @@ public class TeamManager {
         return null;
     }
 
-    public void createTeam(String name, Color color, String symbol, Player leader) {
+    public void createTeam(String name, Color color, String symbol, OfflinePlayer leader) {
         UUID uuid = UUID.randomUUID();
         teamData.put(uuid, new TeamData(uuid, name, color, symbol, leader, List.of(leader), null));
         data.set(uuid + ".Name", name);
@@ -112,7 +116,7 @@ public class TeamManager {
         }
     }
 
-    public void setTeamLeader(UUID uuid, Player player) {
+    public void setTeamLeader(UUID uuid, OfflinePlayer player) {
         TeamData data = teamData.get(uuid);
         if (data != null) {
             data.setLeader(player);
@@ -120,15 +124,15 @@ public class TeamManager {
         }
     }
 
-    public void addMember(UUID uuid, Player player) {
+    public void addMember(UUID uuid, OfflinePlayer player) {
         TeamData data = teamData.get(uuid);
         if (data != null) {
             data.addMember(player);
-            this.data.set(uuid + ".Members", data.getMembers().stream().map(Player::getUniqueId).map(UUID::toString).toList());
+            this.data.set(uuid + ".Members", data.getMembers().stream().map(OfflinePlayer::getUniqueId).map(UUID::toString).toList());
         }
     }
 
-    public void removeMember(UUID uuid, Player player) {
+    public void removeMember(UUID uuid, OfflinePlayer player) {
         TeamData data = teamData.get(uuid);
         if (data != null) {
             data.removeMember(player);
@@ -159,7 +163,7 @@ public class TeamManager {
         }
     }
     
-    public boolean hasTeam(Player player) {
+    public boolean hasTeam(OfflinePlayer player) {
         return getTeamData(player) != null;
     }
     
@@ -168,11 +172,11 @@ public class TeamManager {
         private String name;
         private Color color;
         private String symbol;
-        private Player leader;
-        private final List<Player> members;
+        private OfflinePlayer leader;
+        private final List<OfflinePlayer> members;
         private Location base;
 
-        public TeamData(UUID uuid, String name, Color color, String symbol, Player leader, List<Player> members, Location base) {
+        public TeamData(UUID uuid, String name, Color color, String symbol, OfflinePlayer leader, List<OfflinePlayer> members, Location base) {
             this.uuid = uuid;
             this.name = name;
             this.color = color;
@@ -210,23 +214,23 @@ public class TeamManager {
             return symbol;
         }
 
-        public void setLeader(Player player) {
+        public void setLeader(OfflinePlayer player) {
             this.leader = player;
         }
 
-        public Player getLeader() {
+        public OfflinePlayer getLeader() {
             return leader;
         }
 
-        public void addMember(Player player) {
+        public void addMember(OfflinePlayer player) {
             members.add(player);
         }
 
-        public List<Player> getMembers() {
+        public List<OfflinePlayer> getMembers() {
             return members;
         }
 
-        public void removeMember(Player player) {
+        public void removeMember(OfflinePlayer player) {
             members.remove(player);
         }
 

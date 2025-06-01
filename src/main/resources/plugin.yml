@@ -7,5 +7,8 @@ authors: [ Arsh ]
 description: A minecraft plugin for CSky SMP
 commands:
   team:
+  base:
+  t:
   withdraw:
   combatsession:
+

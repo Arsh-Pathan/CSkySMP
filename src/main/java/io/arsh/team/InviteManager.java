@@ -47,6 +47,10 @@ public class InviteManager {
         invitions.remove(receiver);
     }
 
+    public boolean hasInvite(Player player) {
+        return invitions.containsKey(player);
+    }
+
     public record InviteData(TeamManager.TeamData teamData, Player inviter, Player receiver) {
     }
 

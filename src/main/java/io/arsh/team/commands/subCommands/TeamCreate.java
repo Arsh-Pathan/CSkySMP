@@ -7,13 +7,17 @@ import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class TeamCreate extends SubCommand {
 
     private final String PREFIX = "&3&lS&b&lM&f&lP ";
     private final TeamManager teamManager;
+    private final List<String> symbols;
 
-    public TeamCreate(TeamManager teamManager) {
+    public TeamCreate(TeamManager teamManager, List<String> symbols) {
         this.teamManager = teamManager;
+        this.symbols = symbols;
     }
 
     @Override
@@ -62,7 +66,11 @@ public class TeamCreate extends SubCommand {
             return;
         }
 
-        // ToDo: Add check for symbol validity.
+        if (symbol.length() != 1 && symbols.contains(symbol)) {
+            player.sendMessage(Color.colorize(PREFIX + "&fInvalid symbol. Please provide a valid symbol."));
+            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 100.0F, 1.0F);
+            return;
+        }
 
         teamManager.createTeam(name, Color.valueOf(color), symbol, player);
 
