@@ -60,6 +60,15 @@ public class TeamManager {
         return null;
     }
 
+    public boolean nameTaken(String name) {
+        for (TeamData data : teamData.values()) {
+            if (data.getName().equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void createTeam(String name, Color color, String symbol, OfflinePlayer leader) {
         UUID uuid = UUID.randomUUID();
         teamData.put(uuid, new TeamData(uuid, name, color, symbol, leader, List.of(leader), null));

@@ -38,17 +38,21 @@ public class InviteManager {
         }, 20 * 60 * 10);
     }
 
-    public void acceptInvite(Player receiver) {
-        invitions.get(receiver).teamData.addMember(receiver);
-        invitions.remove(receiver);
+    public void acceptInvite(InviteData inviteData) {
+        teamManager.addMember(inviteData.teamData.getUUID(), inviteData.receiver);
+        invitions.remove(inviteData.receiver());
     }
 
-    public void declineInvite(Player receiver) {
-        invitions.remove(receiver);
+    public void declineInvite(InviteData inviteData) {
+        invitions.remove(inviteData.receiver());
     }
 
     public boolean hasInvite(Player player) {
         return invitions.containsKey(player);
+    }
+
+    public InviteData getInvite(Player player) {
+        return invitions.get(player);
     }
 
     public record InviteData(TeamManager.TeamData teamData, Player inviter, Player receiver) {

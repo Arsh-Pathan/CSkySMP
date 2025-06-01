@@ -4,7 +4,6 @@ import io.arsh.team.InviteManager;
 import io.arsh.team.TeamManager;
 import io.arsh.utils.Color;
 import io.arsh.utils.SubCommand;
-import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -95,11 +94,11 @@ public class TeamInvite extends SubCommand {
     }
 
     private void sendInviteMessage(Player player, TeamManager.TeamData team) {
-        TextComponent accept = new TextComponent(Color.colorize("&b&lACCEPT"));
+        TextComponent accept = new TextComponent(Color.colorize(PREFIX + "&b&lACCEPT"));
         ClickEvent clickEvent1 = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/team request accept");
         accept.setClickEvent(clickEvent1);
 
-        TextComponent middle = new TextComponent(Color.colorize("&r &3| "));
+        TextComponent middle = new TextComponent(Color.colorize("&r  &3|  "));
 
         TextComponent deny = new TextComponent(Color.colorize("&b&lDENY"));
         ClickEvent clickEvent2 = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/team request deny");
@@ -107,7 +106,7 @@ public class TeamInvite extends SubCommand {
 
         player.sendMessage(Color.colorize(PREFIX + "&fYou have been invited to join " + team.getColor() + team.getSymbol() + " " + team.getName() + "&f by &3" + player.getName() + "&f."));
         player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_PLACE, 100, 1);
-        player.spigot().sendMessage(ChatMessageType.valueOf(PREFIX), accept, middle, deny);
+        player.spigot().sendMessage(accept, middle, deny);
 
         }
 

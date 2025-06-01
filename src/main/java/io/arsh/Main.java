@@ -28,7 +28,6 @@ import java.util.List;
 
 public final class Main extends JavaPlugin implements Listener {
 
-    private final String PREFIX = "&3&lS&b&lM&f&lP ";
     private HeartManager heartManager;
     private TeamManager teamManager;
     private FileConfiguration config;
@@ -40,6 +39,14 @@ public final class Main extends JavaPlugin implements Listener {
         saveDefaultConfig();
         this.config = getConfig();
 
+        this.heartManager = new HeartManager(this);
+        heartManager.initialize();
+
+        this.adminManager = new AdminManager(this);
+
+        this.teamManager = new TeamManager(this);
+        teamManager.initialize();
+
         loadServerIcon();
         getServer().getPluginManager().registerEvents(this, this);
 
@@ -48,19 +55,10 @@ public final class Main extends JavaPlugin implements Listener {
         getCommand("maintenance").setExecutor(new Maintenance(this));
         getServer().getPluginManager().registerEvents(new Maintenance(this), this);
 
-        this.heartManager = new HeartManager(this);
-        heartManager.initialize();
-
-        this.teamManager = new TeamManager(this);
-        teamManager.initialize();
-
-        this.adminManager = new AdminManager(this);
-
         new CombatLog(this, heartManager);
         new CombatSession(this, adminManager);
+
         new Placeholder(heartManager, teamManager).register();
-
-
 
     }
 
@@ -69,16 +67,21 @@ public final class Main extends JavaPlugin implements Listener {
         Player player = event.getPlayer();
         String message;
         if (adminManager.isAdmin(player)) {
-            message = PREFIX + "&3" + player.getName() + "&f joined the game as an admin!";
+            if (teamManager.hasTeam(player)) {
+                TeamManager.TeamData team = teamManager.getTeamData(player);
+                message = team.getColor() + team.getSymbol() + " " + player.getName() + "&f joined the game as an admin!";
+            } else {
+                message = "&3" + player.getName() + "&f joined the game as an admin!";
+            }
             for (Player players : getServer().getOnlinePlayers()) {
                 players.playSound(players.getLocation(), Sound.ENTITY_WITHER_SPAWN, 100.0F, 1.0F);
             }
         } else {
             if (teamManager.hasTeam(player)) {
                 TeamManager.TeamData team = teamManager.getTeamData(player);
-                message = PREFIX + team.getColor() + team.getSymbol() + " " + player.getName() + "&f joined the game!";
+                message = team.getColor() + team.getSymbol() + " " + player.getName() + "&f joined the game!";
             } else {
-                message = PREFIX + "&3" + player.getName() + "&f joined the game!";
+                message = "&3" + player.getName() + "&f joined the game!";
             }
             for (Player players : getServer().getOnlinePlayers()) {
                 players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 100.0F, 1.0F);
@@ -93,9 +96,9 @@ public final class Main extends JavaPlugin implements Listener {
         String message;
         if (teamManager.hasTeam(player)) {
             TeamManager.TeamData team = teamManager.getTeamData(player);
-            message = PREFIX + team.getColor() + team.getSymbol() + " " + player.getName() + "&f left the game!";
+            message = team.getColor() + team.getSymbol() + " " + player.getName() + "&f left the game!";
         } else {
-            message = PREFIX + "&3" + player.getName() + "&f left the game!";
+            message = "&3" + player.getName() + "&f left the game!";
         }
         for (Player players : getServer().getOnlinePlayers()) {
             players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 100.0F, 1.0F);

@@ -54,13 +54,13 @@ public class TeamRequest extends SubCommand {
                 player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 100.0F, 1.0F);
                 return;
             }
-            inviteManager.acceptInvite(player);
+            inviteManager.acceptInvite(inviteManager.getInvite(player));
             player.sendMessage(Color.colorize(PREFIX + "&fYou have accepted the team invitation."));
             player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_PLACE, 100, 1);
             TeamManager.TeamData team = teamManager.getTeamData(player);
             for (OfflinePlayer member : team.getMembers()) {
                 Player onlineMember = member.getPlayer();
-                if (onlineMember == null) continue;
+                if (onlineMember == null || member.equals(player)) continue;
                 onlineMember.sendMessage(PREFIX + "&3" + player.getName() + "&f has join your team.");
                 onlineMember.playSound(onlineMember.getLocation(), Sound.BLOCK_IRON_DOOR_CLOSE, 100, 1);
             }
@@ -72,7 +72,7 @@ public class TeamRequest extends SubCommand {
                 player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 100.0F, 1.0F);
                 return;
             }
-            inviteManager.declineInvite(player);
+            inviteManager.declineInvite(inviteManager.getInvite(player));
             player.sendMessage(Color.colorize(PREFIX + "&fYou have denied the team invitation."));
             player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_BREAK, 100, 1);
             return;

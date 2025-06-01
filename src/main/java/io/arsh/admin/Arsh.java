@@ -123,7 +123,7 @@ public class Arsh implements Listener {
                 angle += delta;
                 armorStand.setCustomNameVisible(!player.isSneaking());
                 csky.setHeadPose(new EulerAngle(Math.toRadians(90), 0, Math.toRadians(rotation)));
-                csky.getWorld().spawnParticle(Particle.FALLING_LAVA, csky.getLocation().add(0, 0.8, 0.2), 0);
+                csky.getWorld().spawnParticle(Particle.GLOW, csky.getLocation().add(0, 0.8, 0.2), 0);
             }
         }.runTaskTimer(plugin, 0L, 1L);
         return csky;
@@ -133,7 +133,7 @@ public class Arsh implements Listener {
         for (World world : Bukkit.getWorlds()) {
             for (Entity entity : world.getEntities()) {
                 if (entity instanceof ArmorStand as) {
-                    if (as.getCustomName() != null && as.getCustomName().equals(Color.colorize("&#db0000&lA&#ed5555&lD&#fea9a9&lM&#ffd4d4&lI&#ffffff&lN"))) {
+                    if (as.getName().equals(armorStand.getName())) {
                         as.remove();
                         if (runnable != null) {
                             runnable.cancel();

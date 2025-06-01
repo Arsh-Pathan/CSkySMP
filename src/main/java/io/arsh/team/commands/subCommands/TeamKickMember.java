@@ -75,8 +75,7 @@ public class TeamKickMember extends SubCommand {
             player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 100.0F, 1.0F);
             return;
         }
-
-        team.removeMember(target);
+        teamManager.removeMember(team.getUUID(), target);
         player.sendMessage(Color.colorize(PREFIX + "&fYou have kicked &3" + target.getName() + "&f out of your team."));
         player.playSound(player.getLocation(), Sound.BLOCK_WOODEN_DOOR_CLOSE, 100, 1);
         for (OfflinePlayer offlineMember : team.getMembers()) {

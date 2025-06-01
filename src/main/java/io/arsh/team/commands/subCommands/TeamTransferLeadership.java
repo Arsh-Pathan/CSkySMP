@@ -74,7 +74,7 @@ public class TeamTransferLeadership extends SubCommand {
             return;
         }
 
-        teamManager.getTeamData(player).setLeader(target);
+        teamManager.setTeamLeader(teamManager.getTeamData(player).getUUID(), target);
         player.sendMessage(Color.colorize(PREFIX + "&fYou have transferred leadership to &3" + target.getName() + "&f."));
         player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_BREAK, 100, 1);
         target.sendMessage(Color.colorize(PREFIX + "&fLeadership of your team has been transferred to you by &3" + player.getName() + "&f."));
