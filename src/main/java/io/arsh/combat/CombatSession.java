@@ -58,10 +58,20 @@ public class CombatSession implements Listener {
     public void onPortalUse(PlayerPortalEvent event) {
         if (isActive) {
             Player player = event.getPlayer();
-            String message = PREFIX + "Portals are disabled due to an ongoing &5Combat Session&f. Ends in &5" + getTimeLeft() + "&f minutes.";
+            String message = PREFIX + "&fPortals are disabled due to an ongoing &5Combat Session&f. Ends in &5" + getTimeLeft() + "&f minutes.";
             player.sendMessage(Color.colorize(message));
             player.playSound(player.getLocation(), Sound.BLOCK_VINE_BREAK, 100.0F, 1.0F);
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerPortalEvent event) {
+        if (isActive) {
+            Player player = event.getPlayer();
+            String message = PREFIX + "&fCombat session is in progress. Ends in &5" + getTimeLeft() + "&f minutes.";
+            player.sendMessage(Color.colorize(message));
+            bossBar.addPlayer(player);
         }
     }
 
@@ -122,12 +132,17 @@ public class CombatSession implements Listener {
         } else {
             Bukkit.broadcastMessage(Color.colorize(PREFIX + "&fThe &5Combat Session &fhas ended."));
         }
+
+        for (World world : Bukkit.getWorlds()) {
+            world.getWorldBorder().reset();
+        }
+
         Bukkit.getOnlinePlayers().forEach(p -> p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F));
     }
 
 
     private void createBossBar() {
-        bossBar = Bukkit.createBossBar("Combat Session in Progress", BarColor.RED, BarStyle.SEGMENTED_6, BarFlag.CREATE_FOG);
+        bossBar = Bukkit.createBossBar("Combat Session in Progress", BarColor.PURPLE, BarStyle.SEGMENTED_6, BarFlag.DARKEN_SKY );
         bossBar.setVisible(true);
         for (Player player : Bukkit.getOnlinePlayers()) {
             bossBar.addPlayer(player);
@@ -146,7 +161,7 @@ public class CombatSession implements Listener {
 
                 if (bossBar != null) {
                     bossBar.setProgress(progress);
-                    bossBar.setTitle("Session ends in " + getTimeLeft() + " min");
+                    bossBar.setTitle(Color.colorize("Session ends in &5" + getTimeLeft() + "&f minute."));
                 }
 
                 if (!warnedOneMinute && millisLeft <= TimeUnit.MINUTES.toMillis(1)) {
@@ -160,13 +175,13 @@ public class CombatSession implements Listener {
                 if (!startedFinalCountdown && millisLeft <= TimeUnit.SECONDS.toMillis(10)) {
                     startedFinalCountdown = true;
                     new BukkitRunnable() {
-                        int secondsLeft = 10;
+                        int secondsLeft = 5;
                         @Override
                         public void run() {
                             if (secondsLeft > 0) {
-                                Bukkit.broadcastMessage(Color.colorize(PREFIX + "&fEnding in &5" + secondsLeft + "&f..."));
+                                Bukkit.broadcastMessage(Color.colorize(PREFIX + "&fEnding in &5" + secondsLeft + "&f seconds..."));
                                 for (Player player : Bukkit.getOnlinePlayers()) {
-                                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0F, 1.0F + (10 - secondsLeft) * 0.05F);
+                                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0F, 1.0F + (5 - secondsLeft) * 0.05F);
                                 }
                             } else {
                                 cancel(); 
@@ -198,7 +213,7 @@ public class CombatSession implements Listener {
                     @Override
                     public void run() {
                         if (secondsLeft == 60 || secondsLeft == 30 || secondsLeft == 10) {
-                            Bukkit.broadcastMessage(Color.colorize(PREFIX + "&fCombat session starting in &5" + secondsLeft + " &fseconds."));
+                            Bukkit.broadcastMessage(Color.colorize(PREFIX + "&fCombat session starting in &5" + secondsLeft + " &fseconds. Teleport to spawn or you will be killed by world border!!!"));
                         } else if (secondsLeft <= 5 && secondsLeft > 0) {
                             Bukkit.broadcastMessage(Color.colorize(PREFIX + "&fStarting in &5" + secondsLeft + " &f..."));
                             for (Player player : Bukkit.getOnlinePlayers()) {

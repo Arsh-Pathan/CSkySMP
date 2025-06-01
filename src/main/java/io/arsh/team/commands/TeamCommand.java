@@ -151,11 +151,13 @@ public class TeamCommand implements CommandExecutor, TabCompleter {
                 }
                 if (args.length == 3) {
                     completions.add("<color>");
-                    completions.add(Color.getColorList().toString());
+                    for (Color color : Color.getColorList()) {
+                        completions.add(color.toString());
+                    }
                 }
                 if (args.length == 4) {
                     completions.add("<symbol>");
-                    completions.add(symbols.toString());
+                    completions.addAll(symbols);
                 }
             }
             if (args[0].equalsIgnoreCase("request")) {

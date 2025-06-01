@@ -99,13 +99,13 @@ public class Maintenance implements Listener, CommandExecutor, TabCompleter {
                 return true;
             }
             if (args[0].equalsIgnoreCase("start")) {
-                if (args.length == 1) {
-                    player.sendMessage(Color.colorize( PREFIX + "&fPlease specify a kick message!"));
+                if (isMaintenanceOn()) {
+                    player.sendMessage(Color.colorize( PREFIX + "&fMaintenance mode is already enabled."));
                     player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 100.0F, 1.0F);
                     return true;
                 }
-                if (isMaintenanceOn()) {
-                    player.sendMessage(Color.colorize( PREFIX + "&fMaintenance mode is already enabled."));
+                if (args.length == 1) {
+                    player.sendMessage(Color.colorize( PREFIX + "&fPlease specify a kick message!"));
                     player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 100.0F, 1.0F);
                     return true;
                 }

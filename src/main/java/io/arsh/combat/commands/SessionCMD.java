@@ -45,12 +45,12 @@ public class SessionCMD implements CommandExecutor, TabCompleter {
             switch (args[0].toLowerCase()) {
                 case "start":
                     session.start(true);
-                    player.sendMessage(Color.colorize(PREFIX + "&5Combat Session &fhas been force-started."));
+                    player.sendMessage(Color.colorize(PREFIX + "&5Combat Session &fhas been forced-started."));
                     player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 100.0F, 1.0F);
                     break;
                 case "stop":
                     session.stop(true);
-                    player.sendMessage(Color.colorize(PREFIX + "&5Combat Session has been forced stopped."));
+                    player.sendMessage(Color.colorize(PREFIX + "&5Combat Session &fhas been forced-stopped."));
                     player.playSound(player.getLocation(), Sound.BLOCK_BEACON_DEACTIVATE, 100.0F, 1.0F);
                     break;
                 case "status":

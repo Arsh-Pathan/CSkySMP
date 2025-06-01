@@ -14,6 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.CachedServerIcon;
@@ -39,6 +40,7 @@ public final class Main extends JavaPlugin implements Listener {
         saveDefaultConfig();
         this.config = getConfig();
 
+        loadServerIcon();
         getServer().getPluginManager().registerEvents(this, this);
 
         getServer().getPluginManager().registerEvents(new Chat(teamManager), this);
@@ -49,14 +51,16 @@ public final class Main extends JavaPlugin implements Listener {
         this.heartManager = new HeartManager(this);
         heartManager.initialize();
 
+        this.teamManager = new TeamManager(this);
+        teamManager.initialize();
+
         this.adminManager = new AdminManager(this);
 
         new CombatLog(this, heartManager);
         new CombatSession(this, adminManager);
         new Placeholder(heartManager, teamManager).register();
 
-        this.teamManager = new TeamManager(this);
-        teamManager.initialize();
+
 
     }
 
@@ -84,16 +88,29 @@ public final class Main extends JavaPlugin implements Listener {
     }
 
     @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        String message;
+        if (teamManager.hasTeam(player)) {
+            TeamManager.TeamData team = teamManager.getTeamData(player);
+            message = PREFIX + team.getColor() + team.getSymbol() + " " + player.getName() + "&f left the game!";
+        } else {
+            message = PREFIX + "&3" + player.getName() + "&f left the game!";
+        }
+        for (Player players : getServer().getOnlinePlayers()) {
+            players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 100.0F, 1.0F);
+        }
+        event.setQuitMessage(Color.colorize(message));
+    }
+
+    @EventHandler
     public void onDeath(PlayerDeathEvent event) {
         String message = event.getDeathMessage();
-        event.setDeathMessage(Color.colorize("&#F7E7CE💀 " + message));
+        event.setDeathMessage(Color.colorize("&#db0000☠ &f" + message));
     }
 
     @Override
     public void onDisable() {
-        if (adminManager != null) {
-            adminManager.cleanup();
-        }
     }
 
     @EventHandler
