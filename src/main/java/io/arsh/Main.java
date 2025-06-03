@@ -39,6 +39,12 @@ public final class Main extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
 
+        getLogger().info("");
+        getLogger().info("\u001B[97m█▀▀ \u001B[91m█▀▀ \u001B[93m█ █ \u001B[1;97m\u001B[36m█ █  \u001B[97m █▀▀ █▄█ █▀█");
+        getLogger().info("\u001B[97m█   \u001B[91m▀▀█ \u001B[93m█▀▄ \u001B[1;97m\u001B[36m █   \u001B[97m ▀▀█ █ █ █▀▀");
+        getLogger().info("\u001B[97m▀▀▀ \u001B[91m▀▀▀ \u001B[93m▀ ▀ \u001B[1;97m\u001B[36m ▀   \u001B[97m ▀▀▀ ▀ ▀ ▀  ");
+        getLogger().info("By Arsh");
+
         saveDefaultConfig();
         this.config = getConfig();
 

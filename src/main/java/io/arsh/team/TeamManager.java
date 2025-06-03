@@ -104,6 +104,7 @@ public class TeamManager {
         data.set(uuid + ".Leader", null);
         data.set(uuid + ".Members", null);
         data.set(uuid + ".Base", null);
+        data.set(String.valueOf(uuid), null);
         saveData();
     }
 

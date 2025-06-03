@@ -54,7 +54,7 @@ public class TeamLeave extends SubCommand {
         for (OfflinePlayer member : team.getMembers()) {
             Player onlineMember = member.getPlayer();
             if (onlineMember == null) continue;
-            onlineMember.sendMessage(PREFIX + "&3" + player.getName() + "&f has left your team.");
+            onlineMember.sendMessage(Color.colorize(PREFIX + "&3" + player.getName() + "&f has left your team."));
             onlineMember.playSound(onlineMember.getLocation(), Sound.BLOCK_IRON_DOOR_CLOSE, 100, 1);
         }
     }

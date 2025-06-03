@@ -61,7 +61,7 @@ public class TeamRequest extends SubCommand {
             for (OfflinePlayer member : team.getMembers()) {
                 Player onlineMember = member.getPlayer();
                 if (onlineMember == null || member.equals(player)) continue;
-                onlineMember.sendMessage(PREFIX + "&3" + player.getName() + "&f has join your team.");
+                onlineMember.sendMessage(Color.colorize(PREFIX + "&3" + player.getName() + "&f has join your team."));
                 onlineMember.playSound(onlineMember.getLocation(), Sound.BLOCK_IRON_DOOR_CLOSE, 100, 1);
             }
             return;
