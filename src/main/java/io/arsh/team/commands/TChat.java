@@ -1,6 +1,8 @@
 package io.arsh.team.commands;
 
 import io.arsh.team.TeamManager;
+import io.arsh.utils.Color;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -22,18 +24,26 @@ public class TChat implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player player) {
-            if (args.length == 0) {
-                player.sendMessage(PREFIX + "&fInvalid use of command. Use &3/t <message>&f.");
+            if (!teamManager.hasTeam(player)) {
+                player.sendMessage(Color.colorize(PREFIX + "&fYou don't have a team to use this command."));
                 player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 100, 1);
                 return true;
             }
-            if (!teamManager.hasTeam(player)) {
-                player.sendMessage(PREFIX + "&fYou don't have a team to use this command.");
+            if (args.length == 0) {
+                player.sendMessage(Color.colorize(PREFIX + "&fInvalid use of command. Use &3/t <message>&f."));
                 player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 100, 1);
                 return true;
             }
             String message = String.join(" ", args);
-            player.performCommand("/team chat " + message);
+            TeamManager.TeamData team = teamManager.getTeamData(player);
+            for (OfflinePlayer offlineMember : team.getMembers()) {
+                if (offlineMember != null && offlineMember.isOnline()) {
+                    Player member = offlineMember.getPlayer();
+                    assert member != null;
+                    member.sendMessage(Color.colorize(team.getColor() + "&lT " + team.getColor() + player.getName() + "&f: " + message));
+                    member.playSound(member.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 100, 1);
+                }
+            }
         }
         return true;
     }

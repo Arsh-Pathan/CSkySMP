@@ -7,7 +7,6 @@ import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import javax.swing.*;
 import java.util.UUID;
 
 public class TeamRecolor extends SubCommand {
@@ -37,7 +36,7 @@ public class TeamRecolor extends SubCommand {
     @Override
     public void perform(CommandSender sender, String[] args) {
         Player player = (Player) sender;
-        if (args.length != 3) {
+        if (args.length != 2) {
             player.sendMessage(Color.colorize(PREFIX + "&fInvalid use of command use &3" + getSyntax() + "&f."));
             player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 100.0F, 1.0F);
             return;
@@ -55,8 +54,8 @@ public class TeamRecolor extends SubCommand {
             return;
         }
 
-        String name = args[2].toUpperCase();
-        Color color = Color.valueOf(args[2]);
+        String name = args[1].toUpperCase();
+        Color color = Color.valueOf(name);
 
         if (!Color.getColorList().contains(Color.valueOf(name))) {
             player.sendMessage(Color.colorize(PREFIX + "&fInvalid color. Please provide a valid color."));
@@ -67,7 +66,7 @@ public class TeamRecolor extends SubCommand {
         UUID uuid = teamManager.getTeamData(player).getUUID();
 
         teamManager.setTeamColor(uuid, color);
-        player.sendMessage(Color.colorize(PREFIX + "&fYour team base has been renamed."));
+        player.sendMessage(Color.colorize(PREFIX + "&fYour team base has been recolored."));
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 100, 1);
     }
 

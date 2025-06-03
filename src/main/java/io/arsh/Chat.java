@@ -23,7 +23,7 @@ public class Chat implements Listener {
             TeamManager.TeamData team = teamManager.getTeamData(player);
             format = Color.colorize(team.getColor() + team.getSymbol() + " " + player.getName() + "&f: " + event.getMessage());
         } else {
-            format = Color.colorize("&f" + player.getName() + "&f: " + event.getMessage());
+            format = Color.colorize("&7" + player.getName() + "&7: " + event.getMessage());
         }
         event.setFormat(format);
 

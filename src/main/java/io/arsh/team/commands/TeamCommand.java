@@ -35,7 +35,7 @@ public class TeamCommand implements CommandExecutor, TabCompleter {
         this.plugin = plugin;
         this.teamManager = teamManager;
         this.inviteManager = inviteManager;
-        plugin.getCommand("base").setExecutor(new Base());
+        plugin.getCommand("base").setExecutor(new Base(plugin, teamManager));
         plugin.getCommand("t").setExecutor(new TChat(teamManager));
         subCommand = new ArrayList<>();
         subCommand.add(new TeamCreate(teamManager, symbols));
@@ -50,6 +50,9 @@ public class TeamCommand implements CommandExecutor, TabCompleter {
         subCommand.add(new TeamRequest(teamManager, inviteManager));
         subCommand.add(new TeamInfo(teamManager));
         subCommand.add(new TeamLeave(teamManager));
+        subCommand.add(new TeamRename(teamManager));
+        subCommand.add(new TeamRecolor(teamManager));
+        subCommand.add(new TeamSetSymbol(teamManager, symbols));
     }
 
     @Override
@@ -94,14 +97,21 @@ public class TeamCommand implements CommandExecutor, TabCompleter {
                     completions.add("kick");
                     completions.add("invite");
                     completions.add("setbase");
-                    completions.add("removebase");
+                    completions.add("rename");
+                    completions.add("recolor");
+                    completions.add("setsymbol");
+                    if (teamManager.getTeamData(player).hasBase()) {
+                        completions.add("removebase");
+                    }
                     completions.add("disband");
                 } else {
                     completions.add("leave");
                 }
                 completions.add("chat");
                 completions.add("info");
-                completions.add("base");
+                if (teamManager.getTeamData(player).hasBase()) {
+                    completions.add("base");
+                }
             } else {
                 completions.add("create");
                 completions.add("request");
@@ -139,11 +149,29 @@ public class TeamCommand implements CommandExecutor, TabCompleter {
                         }
                     }
                 }
+                if (args[0].equalsIgnoreCase("rename")) {
+                    if (args.length == 2) {
+                        completions.add("<name>");
+                    }
+                }
+                if (args[0].equalsIgnoreCase("recolor")) {
+                    if (args.length == 2) {
+                        completions.add("<color>");
+                        for (Color color : Color.getColorList()) {
+                            completions.add(color.toString());
+                        }
+                    }
+                }
+                if (args[0].equalsIgnoreCase("setsymbol")) {
+                    if (args.length == 2) {
+                        completions.add("<symbol>");
+                        completions.addAll(symbols);
+                    }
+                }
             }
             if (args[0].equalsIgnoreCase("chat")) {
                 completions.add("<message>");
             }
-
         } else {
             if (args[0].equalsIgnoreCase("create")) {
                 if (args.length == 2) {
@@ -172,32 +200,13 @@ public class TeamCommand implements CommandExecutor, TabCompleter {
 
 
     public List<String> symbols = List.of(
-            "☲", "☨", "♗", "☳", "⇄", "⌀", "⌂", "⌘", "⌚", "⌛",
-            "⏏", "⏩", "⏪", "⏭", "⏮", "⏯", "⏳", "⏴", "⏵", "⏶",
-            "⏷", "⏸", "⏹", "⏺", "⏻", "⏼", "⏽", "─", "│", "┌",
-            "┐", "└", "┘", "├", "┤", "┬", "┴", "┼", "═", "║",
-            "╒", "╓", "╔", "╕", "╖", "╗", "╘", "╙", "╚", "╛",
-            "╜", "╝", "╞", "╟", "╠", "╡", "╢", "╣", "╤", "╥",
-            "╦", "╧", "╨", "╩", "╪", "╫", "╬", "▀", "▄", "█",
-            "▌", "▐", "░", "▒", "▓", "■", "□", "▲", "△", "▶",
-            "▼", "▽", "◀", "◆", "◇", "○", "◎", "●", "◘", "◦",
-            "☀", "☁", "☂", "☃", "☄", "★", "☆", "☈", "☐", "☑",
-            "☒", "☔", "☜", "☞", "☠", "☮", "☯", "☰", "☱", "☴",
-            "☵", "☶", "☷", "☹", "❣", "❤", "✌", "☝", "✍", "♨",
-            "✈", "❄", "♠", "♥", "♦", "♣", "♟", "☎", "⌨", "✉",
-            "✏", "✒", "✂", "☢", "☣", "⬆", "⬇", "➡", "⬅", "↗",
-            "↘", "↙", "↖", "↕", "↔", "↩", "↪", "✡", "☸", "✝",
-            "☦", "☪", "♈", "♉", "♊", "♋", "♌", "♍", "♎", "♏",
-            "♐", "♑", "♒", "♓", "♀", "♂", "✖", "‼", "〰", "✔",
-            "✳", "✴", "❇", "©", "®", "™", "Ⓜ", "㊗", "㊙", "▪",
-            "▫", "☋", "*", "☌", "♜", "♕", "♡", "♬", "‍", "☚",
-            "♮", "♝", "♯", "♭", "☓", "☛", "☭", "0", "♢", "3",
-            "✐", "♖", "☈", "★", "♚", "♛", "✎", "♪", "☽", "☡",
-            "☼", "♅", "☟", "❦", "☊", "☍", "☬", "7", "♧", "☫",
-            "☾", "☤", "❧", "2", "8", "♄", "♁", "1", "♔", "4",
-            "❥", "☥", "☻", "5", "♤", "6", "♞", "♆", "#", "♃",
-            "♩", "9", "☇", "♫", "☏", "♘", "☧", "☉", "♇", "☩",
-            "♙"
+            "⇄", "⌀", "⌂", "⌘", "⌚", "⏏", "⏩", "⏪",
+            "⏭", "⏮", "⏯", "⏳", "⏹", "⏺", "⏻", "⏼", "■", "▲",
+            "▼", "◆", "◎", "☀", "☁", "☂", "☃", "☄", "★", "☆",
+            "☈", "☔", "☠", "☮", "☯", "❤", "✈", "❄", "♠",
+            "♥", "♦", "♣", "✉", "✂", "☢", "✖", "✔", "✳", "✴",
+            "❇", "©", "®", "㊗", "㊙", "♬", "♯", "☈", "★", "✎",
+            "♪", "☽", "♧", "❥", "☻","#", "☏"
     );
 
 }

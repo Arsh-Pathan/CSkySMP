@@ -36,7 +36,7 @@ public class TeamRename extends SubCommand {
     @Override
     public void perform(CommandSender sender, String[] args) {
         Player player = (Player) sender;
-        if (args.length != 3) {
+        if (args.length != 2) {
             player.sendMessage(Color.colorize(PREFIX + "&fInvalid use of command use &3" + getSyntax() + "&f."));
             player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 100.0F, 1.0F);
             return;
@@ -53,12 +53,13 @@ public class TeamRename extends SubCommand {
             player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 100.0F, 1.0F);
             return;
         }
-        String name = args[2];
+        String name = args[1];
         if (teamManager.nameTaken(name)) {
             player.sendMessage(Color.colorize(PREFIX + "&fTeam name &3" + name + "&f is already taken."));
             player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 100.0F, 1.0F);
             return;
         }
+
         UUID uuid = teamManager.getTeamData(player).getUUID();
 
         teamManager.setTeamName(uuid, name);

@@ -1,6 +1,7 @@
 package io.arsh.team;
 
 import io.arsh.team.commands.TeamCommand;
+import io.arsh.team.events.TeleportHandler;
 import io.arsh.utils.Color;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
@@ -10,10 +11,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class TeamManager {
     private final JavaPlugin plugin;
@@ -29,6 +27,7 @@ public class TeamManager {
 
     public void initialize() {
         loadTeamData();
+        plugin.getServer().getPluginManager().registerEvents(new TeleportHandler(plugin), plugin);
         plugin.getCommand("team").setExecutor(new TeamCommand(plugin, this, inviteManager));
     }
     
@@ -45,7 +44,12 @@ public class TeamManager {
             Color color = Color.valueOf(data.getString(key + ".Color"));
             String symbol = data.getString(key + ".Symbol");
             OfflinePlayer leader = plugin.getServer().getOfflinePlayer(UUID.fromString(data.getString(key + ".Leader")));
-            List<OfflinePlayer> members = data.getStringList(key + ".Members").stream().map(UUID::fromString).map(plugin.getServer()::getOfflinePlayer).toList();
+            List<OfflinePlayer> members = new ArrayList<>(
+                    data.getStringList(key + ".Members").stream()
+                            .map(UUID::fromString)
+                            .map(plugin.getServer()::getOfflinePlayer)
+                            .toList()
+            );
             Location base = data.getLocation(key + ".Base");
             teamData.put(uuid, new TeamData(uuid, name, color, symbol, leader, members, base));
         }
@@ -71,9 +75,11 @@ public class TeamManager {
 
     public void createTeam(String name, Color color, String symbol, OfflinePlayer leader) {
         UUID uuid = UUID.randomUUID();
-        teamData.put(uuid, new TeamData(uuid, name, color, symbol, leader, List.of(leader), null));
+        List<OfflinePlayer> members = new ArrayList<>();
+        members.add(leader);
+        teamData.put(uuid, new TeamData(uuid, name, color, symbol, leader, members, null));
         data.set(uuid + ".Name", name);
-        data.set(uuid + ".Color", color.toString());
+        data.set(uuid + ".Color", color.name());
         data.set(uuid + ".Symbol", symbol);
         data.set(uuid + ".Leader", leader.getUniqueId().toString());
         data.set(uuid + ".Members", List.of(leader.getUniqueId().toString()));
@@ -106,6 +112,7 @@ public class TeamManager {
         if (data != null) {
             data.setName(name);
             this.data.set(uuid + ".Name", name);
+            saveData();
         }
     }
 
@@ -114,6 +121,7 @@ public class TeamManager {
         if (data != null) {
             data.setColor(color);
             this.data.set(uuid + ".Color", color.toString());
+            saveData();
         }
     }
 
@@ -122,6 +130,7 @@ public class TeamManager {
         if (data != null) {
             data.setSymbol(symbol);
             this.data.set(uuid + ".Symbol", symbol);
+            saveData();
         }
     }
 
@@ -130,6 +139,7 @@ public class TeamManager {
         if (data != null) {
             data.setLeader(player);
             this.data.set(uuid + ".Leader", player.getUniqueId().toString());
+            saveData();
         }
     }
 
@@ -138,6 +148,7 @@ public class TeamManager {
         if (data != null) {
             data.addMember(player);
             this.data.set(uuid + ".Members", data.getMembers().stream().map(OfflinePlayer::getUniqueId).map(UUID::toString).toList());
+            saveData();
         }
     }
 
@@ -145,6 +156,8 @@ public class TeamManager {
         TeamData data = teamData.get(uuid);
         if (data != null) {
             data.removeMember(player);
+            this.data.set(uuid + ".Members", data.getMembers().stream().map(OfflinePlayer::getUniqueId).map(UUID::toString).toList());
+            saveData();
         }
     }
 
@@ -153,6 +166,7 @@ public class TeamManager {
         if (data != null) {
             data.setBase(base);
             this.data.set(uuid + ".Base", base);
+            saveData();
         }
     }
 
@@ -161,6 +175,7 @@ public class TeamManager {
         if (data != null) {
             data.setBase(null);
             this.data.set(uuid + ".Base", null);
+            saveData();
         }
     }
 

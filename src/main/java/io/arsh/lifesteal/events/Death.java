@@ -26,10 +26,12 @@ public class Death implements Listener {
             if (heartManager.hasHaxHearts(killer)) {
                 killer.sendMessage(Color.colorize( PREFIX + "&fYou have reached&4 maximum&f heart limit. So you can't obtain heart of this player."));
                 killer.playSound(killer.getLocation(), Sound.ENTITY_VILLAGER_NO, 100.0F, 1.0F);
-            } else
+                return;
+            }
             if (heartManager.getHearts(victim) == 1) {
                 killer.sendMessage(Color.colorize( PREFIX + "&fThe player you just killed only has &4one &fheart left. So you can't obtain heart of this player."));
                 killer.playSound(killer.getLocation(), Sound.ENTITY_VILLAGER_NO, 100.0F, 1.0F);
+                return;
             }
             heartManager.dropHeart(victim, 1);
             event.setDeathMessage(Color.colorize("&4" + victim.getName() + "&f has been killed by &4" + killer.getName() + "&f."));

@@ -78,7 +78,7 @@ public class TeamCreate extends SubCommand {
         player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 100, 1);
         for (Player onlinePlayers : player.getWorld().getPlayers() ) {
             if (onlinePlayers == player) continue;
-            onlinePlayers.sendMessage(PREFIX + "&3" + player.getName() + "&f has created a new team " + teamManager.getTeamData(player).getColor() + teamManager.getTeamData(player).getSymbol() + " " + teamManager.getTeamData(player).getName() +  "&f.");
+            onlinePlayers.sendMessage(Color.colorize(PREFIX + "&3" + player.getName() + "&f has created a new team " + teamManager.getTeamData(player).getColor() + teamManager.getTeamData(player).getSymbol() + " " + teamManager.getTeamData(player).getName() +  "&f."));
             onlinePlayers.playSound(onlinePlayers.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 100, 1);
         }
     }

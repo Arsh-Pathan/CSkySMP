@@ -8,7 +8,10 @@ import io.arsh.team.TeamManager;
 import io.arsh.utils.Color;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -59,6 +62,15 @@ public final class Main extends JavaPlugin implements Listener {
         new CombatSession(this, adminManager);
 
         new Placeholder(heartManager, teamManager).register();
+        for (World world : getServer().getWorlds()) {
+            for (Entity entity : world.getEntities()) {
+                if (entity instanceof ArmorStand armorStand) {
+                    if (armorStand.getCustomName().equalsIgnoreCase(Color.colorize("&#db0000&lA&#ed5555&lD&#fea9a9&lM&#ffd4d4&lI&#ffffff&lN"))) {
+                        armorStand.remove();
+                    }
+                }
+            }
+        }
 
     }
 
@@ -71,7 +83,7 @@ public final class Main extends JavaPlugin implements Listener {
                 TeamManager.TeamData team = teamManager.getTeamData(player);
                 message = team.getColor() + team.getSymbol() + " " + player.getName() + "&f joined the game as an admin!";
             } else {
-                message = "&3" + player.getName() + "&f joined the game as an admin!";
+                message = "&7" + player.getName() + "&f joined the game as an admin!";
             }
             for (Player players : getServer().getOnlinePlayers()) {
                 players.playSound(players.getLocation(), Sound.ENTITY_WITHER_SPAWN, 100.0F, 1.0F);
@@ -81,7 +93,7 @@ public final class Main extends JavaPlugin implements Listener {
                 TeamManager.TeamData team = teamManager.getTeamData(player);
                 message = team.getColor() + team.getSymbol() + " " + player.getName() + "&f joined the game!";
             } else {
-                message = "&3" + player.getName() + "&f joined the game!";
+                message = "&7" + player.getName() + "&f joined the game!";
             }
             for (Player players : getServer().getOnlinePlayers()) {
                 players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 100.0F, 1.0F);
@@ -98,7 +110,7 @@ public final class Main extends JavaPlugin implements Listener {
             TeamManager.TeamData team = teamManager.getTeamData(player);
             message = team.getColor() + team.getSymbol() + " " + player.getName() + "&f left the game!";
         } else {
-            message = "&3" + player.getName() + "&f left the game!";
+            message = "&7" + player.getName() + "&f left the game!";
         }
         for (Player players : getServer().getOnlinePlayers()) {
             players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 100.0F, 1.0F);
