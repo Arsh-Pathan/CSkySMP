@@ -37,7 +37,7 @@ Combat-Session:
   Duration: 60
   Start-At: 17
   End-Time: 0
-  World-Border: 64
+  World-Border: 512
 
 Admins:
   - ArshGamer

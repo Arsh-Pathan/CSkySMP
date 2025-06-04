@@ -66,7 +66,7 @@ public class TeamCreate extends SubCommand {
             return;
         }
 
-        if (symbol.length() != 1 && symbols.contains(symbol)) {
+        if (!symbols.contains(symbol)) {
             player.sendMessage(Color.colorize(PREFIX + "&fInvalid symbol. Please provide a valid symbol."));
             player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 100.0F, 1.0F);
             return;
