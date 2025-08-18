@@ -35,7 +35,7 @@ public class MinecraftLogging implements Listener {
     @EventHandler
     public void onAdvancement(PlayerAdvancementDoneEvent event) {
         Player player = event.getPlayer();
-        String message = "> **" + player.getName() + "** has made the adveancement [" + event.getAdvancement().displayName() + "]!";
+        String message = "> **" + player.getName() + "** has made the adveancement [" + event.getAdvancement().getDisplay().title() + "]!";
         Bot.guild.getTextChannelById(Bot.CHAT_CHANNEL_ID).sendMessage(message).queue();
     }
 
