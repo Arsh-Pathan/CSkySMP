@@ -12,7 +12,7 @@ import org.bukkit.Bukkit;
 
 public class Bot {
 
-    private final String TOKEN    = "OTQ3NDQxMzUxOTUwMjI1NDQ5.GC6hrX.SuxU2xvhUfsH5pwBdQgkq3VuV1pMsexaXzJCq4";
+    private final String TOKEN    = "";
     private final String GUILD_ID = "903961968803741746";
 
     public final static String CHAT_CHANNEL_ID      = "1069286356951502878";
