@@ -33,8 +33,9 @@ public class Bot {
                     )
                     .setMemberCachePolicy(MemberCachePolicy.ALL)
                     .build();
-            Activity activity = Activity.watching("CSky SMP");
             OnlineStatus onlineStatus = OnlineStatus.DO_NOT_DISTURB;
+            Activity activity = Activity.watching("CSky SMP");
+            bot.getPresence().setPresence(onlineStatus, activity);
             bot.awaitReady();
             guild = bot.getGuildById(GUILD_ID);
             bot.addEventListener(new DiscordChatEvent());

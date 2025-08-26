@@ -15,10 +15,16 @@ public final class Main extends JavaPlugin {
         new Bot();
         getServer().getPluginManager().registerEvents(new MinecraftChatEvent(), this);
         getServer().getPluginManager().registerEvents(new MinecraftLogging(), this);
+        Bot.guild.getTextChannelById(Bot.CHAT_CHANNEL_ID).sendMessage("# Server is black online!").queue();
     }
 
     public static Main getPlugin() {
         return plugin;
+    }
+
+    @Override
+    public void onDisable() {
+        Bot.guild.getTextChannelById(Bot.CHAT_CHANNEL_ID).sendMessage("# Server is now offline or restarting!").queue();
     }
 
 }

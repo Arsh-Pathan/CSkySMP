@@ -15,7 +15,8 @@ public class ChatForwarding {
         Player player = event.getPlayer();
         String message = event.getMessage();
         String format = "**" + player.getName() + "**: " + message;
-        Bot.guild.getTextChannelById(Bot.CHAT_CHANNEL_ID).sendMessage(format);
+        event.setFormat(player.getName() + ": " + event.getMessage());
+        Bot.guild.getTextChannelById(Bot.CHAT_CHANNEL_ID).sendMessage(format).queue();
     }
 
     public static void handleDiscordChatEvent(MessageReceivedEvent event) {
