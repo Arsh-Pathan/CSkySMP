@@ -1,0 +1,43 @@
+Server:
+  Icon: icon.png
+  MOTD:
+    Line1: "                        &e&l❣ &f&lC&#e4232d&lS&#fbaf42&lk&#28bdbc&ly&f&l's &e&l❣"
+    Line2: "          &f☠ &#e4232d&lS&#e8424b&lU&#ec6269&lR&#f08187&lV&#f3a1a5&lI&#f7c0c3&lV&#fbe0e1&lA&#ffffff&lL &#fbaf42&lM&#fcc371&lU&#fdd7a1&lL&#feebd0&lT&#ffffff&lI&f&l-&#28bdbc&lP&#53cac9&lL&#7ed7d7&lA&#a9e5e4&lY&#d4f2f2&lE&#ffffff&lR &f☠"
+
+Maintenance:
+  Enable: false
+  Head-Line: "&6&lMAINTENANCE"
+  Kick-Message: "CSky SMP is currently under maintenance."
+  Icon: maintenance-icon.png
+  MOTD:
+    Line1: "                        &7&l❣ &f&lC&#838383&lS&#9e9e9e&lk&#727272&ly&f&l's &7&l❣"
+    Line2: "          &f☠ &#838383&lS&#959595&lU&#a6a6a6&lR&#b8b8b8&lV&#cacaca&lI&#dcdcdc&lV&#ededed&lA&#ffffff&lL &#626262&lM&#898989&lU&#b1b1b1&lL&#d8d8d8&lT&#ffffff&lI&f&l-&#727272&lP&#8e8e8e&lL&#aaaaaa&lA&#c7c7c7&lY&#e3e3e3&lE&#ffffff&lR &f☠"
+  Whitelist:
+    - ArshGamer
+
+Life-Steal:
+  Max-Heart: 20
+  Heart-Recipe:
+    Slot0: DIAMOND_BLOCK
+    Slot1: DRAGON_BREATH
+    Slot2: DIAMOND_BLOCK
+    Slot3: TOTEM_OF_UNDYING
+    Slot4: HEART_OF_THE_SEA
+    Slot5: TOTEM_OF_UNDYING
+    Slot6: DIAMOND_BLOCK
+    Slot7: NETHERITE_INGOT
+    Slot8: DIAMOND_BLOCK
+
+Combat-Log:
+  Enable: true
+  Duration: 10
+
+Combat-Session:
+  Enable: false
+  Duration: 60
+  Start-At: 17
+  End-Time: 0
+  World-Border: 512
+
+Admins:
+  - ArshGamer
