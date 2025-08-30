@@ -127,6 +127,9 @@ public class PlayerProtection implements Listener {
     }
 
     public void onPlayerLogin(Player player) {
+        if (!player.hasPlayedBefore()) {
+            addProtection(player, 60*30);
+        }
         UUID uuid = player.getUniqueId();
         if (protectionTimes.containsKey(uuid)) {
             startProtectionCountdown(player, protectionTimes.get(uuid));
