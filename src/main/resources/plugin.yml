@@ -1,7 +1,14 @@
 name: CSkySMP
-version: '9.0'
+version: '1.0'
 main: io.arsh.Main
-api-version: '1.21.8'
+api-version: '1.21.5'
 prefix: SMP
 authors: [ Arsh ]
 description: A minecraft plugin for CSky SMP
+commands:
+  team:
+  base:
+  t:
+  withdraw:
+  combatsession:
+  maintenance:
