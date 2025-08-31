@@ -47,13 +47,13 @@ public class Whitelisting {
                 player.setWhitelisted(true);
 
                 message.addReaction(Emoji.CORRECT).queue();
-                message.reply("> Successfully whitelisted **" + username + "**! :)\n> 🎉 You can now join the server.")
+                message.reply("> Successfully whitelisted **" + username + "**! :)\n> You can now join the server.")
                         .queue(msg -> msg.delete().queueAfter(5, TimeUnit.SECONDS));
                 event.getMember().modifyNickname(message
-                        .getContentRaw());
+                        .getContentRaw()).queue();
             } catch (Exception ex) {
                 message.addReaction(Emoji.WRONG).queue();
-                message.reply("> Failed to whitelist **" + username + "** :(\n> Please contact Arsh. ")
+                message.reply("> Failed to whitelist **" + username + "**! :(\n> Please contact Arsh. ")
                         .queue(msg -> msg.delete().queueAfter(5, TimeUnit.SECONDS));
             }
         });

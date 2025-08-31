@@ -27,7 +27,7 @@ public class ChatForwarding {
 
         String message = event.getMessage().getContentRaw();
 
-        String format = Color.colorize("&#7289DADC &#B1BEE9" + user.getName() + ": &#EDF0FA" + message);
+        String format = Color.colorize("&#B1BEE9" + user.getName() + ": &#EDF0FA" + message);
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.sendMessage(format);
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1f, 2f);

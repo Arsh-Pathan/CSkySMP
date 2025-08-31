@@ -20,7 +20,7 @@ public class MinecraftLogging implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        String message = "**" + player.getName() + "** just logged into the server.";
+        String message = "**" + player.getName() + "** join the server.";
 
         Color embedColor = new Color(144, 238, 144);
 

@@ -1,6 +1,7 @@
 package io.arsh;
 
 import io.arsh.utils.Color;
+import io.arsh.utils.SmallText;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
@@ -56,7 +57,7 @@ public class PlayerProtection implements Listener {
         protectionTimes.put(uuid, seconds);
         saveProtectionData();
         startProtectionCountdown(player, seconds);
-        player.sendMessage(colorize("Combat protection activated for " + seconds / 60 + " minutes!"));
+        player.sendMessage(colorize("&9[ᴘʀᴏᴛᴇᴄᴛɪᴏɴ]&f ᴄᴏᴍʙᴀᴛ ᴘʀᴏᴛᴇᴄᴛɪᴏɴ ᴀᴄᴛɪᴠᴀᴛᴇᴅ ꜰᴏʀ &9" + SmallText.smallizier(String.valueOf(seconds / 60)) + "&f ᴍɪɴᴜᴛᴇѕ!"));
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.2F);
     }
 
@@ -92,7 +93,7 @@ public class PlayerProtection implements Listener {
                 if (timeLeft <= 0) {
                     protectionTimes.remove(uuid);
                     protectionTasks.remove(uuid);
-                    player.sendMessage(colorize("Your combat protection has expired! You are now vulnerable to attacks."));
+                    player.sendMessage(colorize("&9[ᴘʀᴏᴛᴇᴄᴛɪᴏɴ]&f ʏᴏᴜʀ ᴄᴏᴍʙᴀᴛ ᴘʀᴏᴛᴇᴄᴛɪᴏɴ ʜᴀѕ ᴇxᴘɪʀᴇᴅ! ʏᴏᴜ ᴀʀᴇ ɴᴏᴡ ᴠᴜʟɴᴇʀᴀʙʟᴇ ᴛᴏ ᴀᴛᴛᴀᴄᴋѕ."));
                     player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 1.0F, 1.0F);
                     saveProtectionData();
                     cancel();
@@ -102,13 +103,14 @@ public class PlayerProtection implements Listener {
                 timeLeft--;
                 protectionTimes.put(uuid, timeLeft);
 
-                if (timeLeft % 60 == 0 || timeLeft <= 5) {
-                    String message = timeLeft <= 5
-                            ? "⚠ Your combat protection ends in " + timeLeft + " seconds!"
-                            : "⏳ Protection time left: " + (timeLeft / 60) + " minutes.";
+                if (timeLeft <= 5) {
+                    String message = "&9[ᴘʀᴏᴛᴇᴄᴛɪᴏɴ]&f ʏᴏᴜʀ ᴄᴏᴍʙᴀᴛ ᴘʀᴏᴛᴇᴄᴛɪᴏɴ ᴇɴᴅѕ ɪɴ &9" + SmallText.smallizier(String.valueOf(timeLeft)) + "&f ѕᴇᴄᴏɴᴅѕ!";
                     player.sendMessage(colorize(message));
-                    float pitch = timeLeft <= 5 ? 1.8F : 1.2F;
-                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, 1.0F, pitch);
+                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, 1.0F, 1.8F);
+                } else if (timeLeft % 60 == 0) {
+                    String message = "&9[ᴘʀᴏᴛᴇᴄᴛɪᴏɴ]&f ᴘʀᴏᴛᴇᴄᴛɪᴏɴ ᴛɪᴍᴇ ʟᴇꜰᴛ: &9" + SmallText.smallizier(String.valueOf(timeLeft / 60)) + "&f ᴍɪɴᴜᴛᴇѕ.";
+                    player.sendMessage(colorize(message));
+                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, 1.0F, 1.2F);
                 }
 
                 saveCounter++;
@@ -133,8 +135,11 @@ public class PlayerProtection implements Listener {
         UUID uuid = player.getUniqueId();
         if (protectionTimes.containsKey(uuid)) {
             startProtectionCountdown(player, protectionTimes.get(uuid));
-            player.sendMessage(colorize("Welcome back! Your combat protection has resumed."));
-            player.playSound(player.getLocation(), Sound.ITEM_TOTEM_USE, 1.0F, 1.0F);
+            Bukkit.getScheduler().runTaskLater(plugin, t-> {
+                player.sendMessage(colorize("&9[ᴘʀᴏᴛᴇᴄᴛɪᴏɴ]&f ᴡᴇʟᴄᴏᴍᴇ ʙᴀᴄᴋ! ʏᴏᴜʀ ᴄᴏᴍʙᴀᴛ ᴘʀᴏᴛᴇᴄᴛɪᴏɴ ʜᴀѕ ʀᴇѕᴜᴍᴇᴅ."));
+                player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1.0F, 1.0F);
+            }, 40);
+
         }
     }
 
@@ -152,11 +157,11 @@ public class PlayerProtection implements Listener {
         if (event.getEntity() instanceof Player damaged && event.getDamager() instanceof Player damager) {
             if (isProtected(damaged)) {
                 event.setCancelled(true);
-                damager.sendMessage(colorize("That player is under PvP Protection! You can't harm them right now."));
+                damager.sendMessage(colorize("&9[ᴘʀᴏᴛᴇᴄᴛɪᴏɴ]&f ᴛʜᴀᴛ ᴘʟᴀʏᴇʀ ɪѕ ᴜɴᴅᴇʀ ᴘᴠᴘ ᴘʀᴏᴛᴇᴄᴛɪᴏɴ! ʏᴏᴜ ᴄᴀɴ'ᴛ ʜᴀʀᴍ ᴛʜᴇᴍ ʀɪɢʜᴛ ɴᴏᴡ."));
                 damager.playSound(damager.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
             } else if (isProtected(damager)) {
                 event.setCancelled(true);
-                damager.sendMessage(colorize("You are currently under PvP Protection and can't attack others."));
+                damager.sendMessage(colorize("&9[ᴘʀᴏᴛᴇᴄᴛɪᴏɴ]&f ʏᴏᴜ ᴀʀᴇ ᴄᴜʀʀᴇɴᴛʟʏ ᴜɴᴅᴇʀ ᴘᴠᴘ ᴘʀᴏᴛᴇᴄᴛɪᴏɴ ᴀɴᴅ ᴄᴀɴ'ᴛ ᴀᴛᴛᴀᴄᴋ ᴏᴛʜᴇʀѕ."));
                 damager.playSound(damager.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
             }
         }
